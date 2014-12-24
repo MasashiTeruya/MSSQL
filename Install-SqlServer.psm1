@@ -1,11 +1,15 @@
 ﻿<#
 .Synopsis
-   
+   Install SQL Server from ISO file
 .DESCRIPTION
    
 .EXAMPLE
    
 .EXAMPLE
+  $Credential = Get-Credential
+  $ImagePath = "\\share\SQL Server 2014\sql_server_2014_enterprise.iso"
+  $ConfigurationFile = "\\share\SQL Server 2014.ini"
+  Install-SqlServer -ComputerName Target -Credential $Credential -ImagePath $ImagePath -ConfigurationFile $ConfigurationFile
    
 #>
 function Install-SqlServer
