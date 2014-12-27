@@ -4,8 +4,6 @@
 .DESCRIPTION
    
 .EXAMPLE
-   
-.EXAMPLE
   $Credential = Get-Credential
   $ImagePath = "\\share\SQL Server 2014\sql_server_2014_enterprise.iso"
   $ConfigurationFile = "\\share\SQL Server 2014.ini"
@@ -83,11 +81,15 @@ function Install-SqlServer
                 & $setup_path /ConfigurationFile=$ConfigurationFile
                 $version_number = 12
                 $mssql_folder = "C:\Program Files\Microsoft SQL Server\MSSQL$version_number.MSSQLSERVER\MSSQL"
+                Resolve-Path $mssql_folder -ErrorAction Stop
                 $binary_path = $mssql_folder + "\Binn\sqlservr.exe" 
                 $backup_folder = Join-Path $mssql_folder "Backup"
                 Dismount-DiskImage $ImagePath
                 Resolve-Path $binary_path -ErrorAction Stop
-                New-NetFirewallRule -DisplayName "SQL Server $Version" -Action Allow -Direction Inbound -Profile Domain -Program $binary_path -Protocol TCP
+                $firewall_name = "SQL Server $Version"
+                Write-Verbose "Creating firewall rule: $firewall_name"
+                Write-Verbose "Path to binary: $binary_path"
+                New-NetFirewallRule -DisplayName $firewall_name -Action Allow -Direction Inbound -Profile Domain -Program $binary_path -Protocol TCP
             } -Argument @($Version, $ImagePath, $ConfigurationFile)# -AsJob
         }|Receive-Job -Wait
     }
