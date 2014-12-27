@@ -90,7 +90,7 @@ function Install-SqlServer
                 Write-Verbose "Creating firewall rule: $firewall_name"
                 Write-Verbose "Path to binary: $binary_path"
                 New-NetFirewallRule -DisplayName $firewall_name -Action Allow -Direction Inbound -Profile Domain -Program $binary_path -Protocol TCP
-            } -Argument @($Version, $ImagePath, $ConfigurationFile)# -AsJob
+            } -Argument @($Version, $ImagePath, $ConfigurationFile) -AsJob
         }|Receive-Job -Wait
     }
     End
